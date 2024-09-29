@@ -137,17 +137,17 @@ According to the given requirements, we need to load data immediately instead of
 
 ### Unit tests
    
-   - Unit tests have been added for each component
-        - LogViewer
-            - Renders the table correctly 
-            - Fetches and displays the logs correctly
-            - Toggles row expansion to show log details
-            - Fetches more logs when scrolled to the end of list
-        - TimeLineChart
-            - Renders the chart and initializes with correct options
-            - Updates chart when the prop changes
+- Unit tests have been added for each component
+    - LogViewer
+        - Renders the table correctly 
+        - Fetches and displays the logs correctly
+        - Toggles row expansion to show log details
+        - Fetches more logs when scrolled to the end of list
+    - TimeLineChart
+        - Renders the chart and initializes with correct options
+        - Updates chart when the prop changes
 
-    - Given more time, I would have tested the application by adding more E2E tests which gives us more confidence on the entire application.
+- Given more time, I would have tested the application by adding more E2E tests which gives us more confidence on the entire application.
 
 
 
