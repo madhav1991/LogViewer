@@ -104,12 +104,12 @@ According to the given requirements, we need to load data immediately instead of
 
     3. getBoundingClientReact
 
-            - Advantages:
+        - Advantages:
 
-                - Gives control when to trigger api call when user reaches a point in the UI
-            
-            - Disadvantages
-                -  It is fast when there are smaller number of elements, but will be slower and forcing a reflow when number of elements rise.  
+            - Gives control when to trigger api call when user reaches a point in the UI
+        
+        - Disadvantages
+            -  It is fast when there are smaller number of elements, but will be slower and forcing a reflow when number of elements rise.  
             
     Due to above mentioned reasons, Interesection observer API is a good aproach for the Log Event Component
 
@@ -120,16 +120,16 @@ According to the given requirements, we need to load data immediately instead of
 
 ### Using mouse 
 
-    - Upon loading the page, by deafult few events are loaded. More events can be loaded by scrolling to the bottom of the page
-    - The left side of the table shows the time formatted as ISO 8601.The right side of table shows details of events.
-    - Each event detail can be seen by clicking on the row of the table, which shows in detailed NDJSON format
-    - On inspection of network logs, by default when the application is loaded only one API call is made. When scrolled to the end of list, subsequent api calls are made. 
+- Upon loading the page, by deafult few events are loaded. More events can be loaded by scrolling to the bottom of the page
+- The left side of the table shows the time formatted as ISO 8601.The right side of table shows details of events.
+- Each event detail can be seen by clicking on the row of the table, which shows in detailed NDJSON format
+- On inspection of network logs, by default when the application is loaded only one API call is made. When scrolled to the end of list, subsequent api calls are made. 
 
 ### Accessibility
 
-    - The webpage is accessible compliant. 
-        - The application can be used by any screen reader which speaks aloud chart description and table information due to aria labels defined.
-        - It can be used by keybaord too using the tab button. On click of tab, the cursor naviagtes through the table through each list which can be clicked using the enter button.
+- The webpage is accessible compliant. 
+    - The application can be used by any screen reader which speaks aloud chart description and table information due to aria labels defined.
+    - It can be used by keybaord too using the tab button. On click of tab, the cursor naviagtes through the table through each list which can be clicked using the enter button.
 
 
 
