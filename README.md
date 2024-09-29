@@ -79,7 +79,7 @@ According to the given requirements, we need to load data immediately instead of
 
 - Best for: Efficient UI rendering and memory usage
 
-Solution : It is we need to use HTTP Range Requests or Stream with fetch API for fetching data from server. HTTP Range Requests suits the requirements better as it only loads the data size we request. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
+**Solution** : It is we need to use HTTP Range Requests or Stream with fetch API for fetching data from server. HTTP Range Requests suits the requirements better as it only loads the data size we request. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
 
 ### Rendering Strategy - Virtual Scrolling
 
