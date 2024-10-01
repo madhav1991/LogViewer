@@ -9,20 +9,20 @@
     - Handle different HTTP response statuses (e.g., success, error).
 - Data Processing:
     - Parse fetched NDJSON data into individual JSON objects.
-    - Extract _time property from each log entry.
+    - Extract the _time property from each log entry.
 - Data Rendering:
     - Render the list of log entries as a table with two columns.
     - Format the _time property in ISO 8601 format (first column).
     - Display the entire event formatted as a single-line JSON string (second column).
 - User Interaction:
     - Allow users to expand/collapse individual log entries.
-    - Expanded view displays the complete event in multiline JSON format.
-    - Collapsed view displays the single-line JSON representation.
+    - The expanded view displays the complete event in multiline JSON format.
+    - The collapsed view displays the single-line JSON representation.
 
 
 ### Non-Functional Requirements for Log Viewer
 - Performance:
-    - Prioritize time-to-first-byte by rendering data as soon as it's downloaded, not waiting for the entire file.
+    - Prioritize time-to-first-byte by rendering data as soon as it's downloaded, rather than waiting for the entire file.
     - Ensure efficient rendering for large log files to minimize performance impact.
 - Usability:
     - Provide a clear and simple interface for users to view and interact with log entries.
@@ -30,14 +30,14 @@
 - Accessibility:
     - Ensure the component is accessible for users with disabilities by adhering to accessibility guidelines.
 - Testability:
-    - Implement unit tests to cover core functionalities like data fetching, parsing, and rendering.
+    - Implement unit tests to cover core functionalities such as data fetching, parsing, and rendering. 
 
 ### API
 
-According to the given requirements, we need to load data immediately instead of waiting for entire file to download. There are few ways to accomplish this
+According to the given requirements, we need to load data immediately instead of waiting for entire file to download. There are a few ways to accomplish this :
 
 1. HTTP Range Requests
-2. Stream with fetch API
+2. Stream with the fetch API
 3. Infinite scrolling
 
 1) HTTP Range Requests
@@ -56,8 +56,8 @@ According to the given requirements, we need to load data immediately instead of
 
 - Advantages:
 
-    - Streamlined data flow: Fetch API with Streams lets you process data as it arrives, reducing load time.
-    - Improved user experience: Logs appear incrementally on the screen, without waiting for the full file.
+    - Streamlined data flow: The Fetch API with Streams lets you process data as it arrives, reducing load time.
+    - Improved user experience: Logs appear incrementally on the screen without waiting for the full file. 
 
 - Disadvantages:
 
@@ -79,7 +79,7 @@ According to the given requirements, we need to load data immediately instead of
 
 - Best for: Efficient UI rendering and memory usage
 
-**Solution** : It is we need to use HTTP Range Requests or Stream with fetch API for fetching data from server. HTTP Range Requests suits the requirements better as it only loads the data size we request. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
+**Solution** : We should use either HTTP Range Requests or Stream with the Fetch API for fetching data from the server.HTTP Range Requests suit the requirements better as they only load the data size requested. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
 
 ### Rendering Strategy - Virtual Scrolling
 
@@ -88,30 +88,30 @@ According to the given requirements, we need to load data immediately instead of
 
         - Advantages:
 
-            - Gives control when to trigger api call when user reaches a point in the UI
+            - Provides control over when to trigger API calls as the user reaches a certain point in the UI.
             - Easier to implement
 
     2. Intersection observer API
 
         - Advantages:
 
-            - Better control to trigger w.r.t user position using threshold paramter
-            - Better performance as it doesn't trigger reflow , hence faster than getBoundingClientReact
+            - Offers better control for triggering actions based on user position using a threshold parameter.
+            - Provides better performance as it doesn't trigger reflow, making it faster than getBoundingClientRect.
         
         - Disadvantages
-            - Not easy to implement
+            - More complex to implement.
 
 
     3. getBoundingClientReact
 
         - Advantages:
 
-            - Gives control when to trigger api call when user reaches a point in the UI
+            - Offers control over when to trigger API calls as the user reaches a certain point in the UI.
         
         - Disadvantages
-            -  It is fast when there are smaller number of elements, but will be slower and forcing a reflow when number of elements rise.  
+            -  Fast with a smaller number of elements, but slower and may force a reflow as the number of elements increases.
             
-    Due to above mentioned reasons, Interesection observer API is a good aproach for the Log Event Component
+    Given these reasons, the Intersection Observer API is a good approach for the Log Event Component.
 
 
 
@@ -120,17 +120,21 @@ According to the given requirements, we need to load data immediately instead of
 
 ### Using mouse 
 
-- Upon loading the page, by deafult few events are loaded. More events can be loaded by scrolling to the bottom of the page
-- The left side of the table shows the time formatted as ISO 8601.The right side of table shows details of events.
-- Each event detail can be seen by clicking on the row of the table, which shows in detailed NDJSON format
-- On inspection of network logs, by default when the application is loaded only one API call is made. When scrolled to the end of list, subsequent api calls are made. 
+- Upon loading the page, a few events are loaded by default. (Added "a few") More events can be loaded by scrolling to the bottom of the page.
+- The left side of the table shows the time formatted as ISO 8601. The right side displays details of the events.
+- Each event's detail can be seen by clicking on the row of the table, which shows it in detailed NDJSON format.
+- Upon inspecting network logs, only one API call is made when the application is loaded. Subsequent API calls are made when scrolled to the end of the list.
+- Bonus Section
+    - TimeLine Component
+        - This graph shows the collection of logs over time. The x-axis indicates time and the y-axis shows the number of events.
+        - TThe width of the x-axis increases as the number of logs increases to accommodate more graphs.
 
 ### Accessibility
 
 - The webpage is accessible compliant. 
-    - The application can be used by any screen reader which speaks aloud chart description and table information due to aria labels defined.
-    - It can be used by keybaord too using the tab button. On click of tab, the cursor naviagtes through the table through each list which can be clicked using the enter button.
-
+    - The application can be used with any screen reader, which speaks aloud the chart description and table information due to defined aria labels.
+    - It can also be navigated using a keyboard. Pressing the Tab key navigates through the table, with each list item selectable using the Enter key.
+    - The graph has a role defined as an image to identify the SVG as an image for assistive technologies. Bars have aria labels, the chart has a title and description, and it can also be focused using the keyboard.
 
 
 ## Testing
@@ -146,6 +150,9 @@ According to the given requirements, we need to load data immediately instead of
     - TimeLineChart
         - Renders the chart and initializes with correct options
         - Updates chart when the prop changes
+    - Utils/index.js
+        - Checks if logs are grouped by date and hour
+        - Returns empty array for empty input
 
 - Given more time, I would have tested the application by adding more E2E tests which gives us more confidence on the entire application.
 
