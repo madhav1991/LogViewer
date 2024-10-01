@@ -8,7 +8,8 @@ import {
   LogRow,
   LoadingIndicator,
 } from "./StyledLogViewer";
-import { TimelineChart } from "./TimeLineChart";
+// import { TimelineChart } from "./TimeLineChart";
+import {TimelineChartSVG} from './TimeLineChart'
 
 const LogViewer = () => {
   const [logs, setLogs] = useState([]); // Store log entries
@@ -73,11 +74,16 @@ const LogViewer = () => {
   }, []);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !loading) {
-        fetchLogs(); // Fetch more logs when the loading element is visible and conditions are met
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !loading) {
+          fetchLogs(); // Fetch more logs when the loading element is visible and conditions are met
+        }
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the loading element is visible
       }
-    });
+    );
 
     if (endOfLogRef.current) {
       observer.observe(endOfLogRef.current);
@@ -100,7 +106,7 @@ const LogViewer = () => {
 
   return (
     <>
-      <TimelineChart data={logs} />
+      <TimelineChartSVG data={logs} />
       <LogViewerContainer>
         <StyledTable>
           <thead>
@@ -124,7 +130,7 @@ const LogViewer = () => {
               >
                 <TableCell>
                   <Chevron expanded={expandedRows.includes(index)}>
-                    {expandedRows.includes(index) ? "▼" : "›"}
+                    {expandedRows.includes(index) ? "⌄" : "›"}
                   </Chevron>
                   {new Date(log._time).toISOString()}
                 </TableCell>

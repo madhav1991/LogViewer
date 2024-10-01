@@ -1,71 +1,60 @@
-import React from "react";
-import { render, cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom";
-import TimelineChart from "./TimelineChart";
-import * as echarts from "echarts";
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import TimelineChartSVG, { groupLogsByDateAndHour } from './TimelineChartSVG';
 
-jest.mock("echarts", () => ({
-  init: jest.fn(() => ({
-    setOption: jest.fn(),
-    dispose: jest.fn(),
-  })),
-}));
+// Sample log data for testing
+const sampleLogs = [
+  { _time: '2024-09-30T05:00:00Z' },
+  { _time: '2024-09-30T05:30:00Z' },
+  { _time: '2024-09-30T06:00:00Z' },
+  { _time: '2024-09-30T07:00:00Z' },
+  { _time: '2024-09-30T07:30:00Z' },
+];
 
-jest.mock("./utils/index", () => ({
-  groupLogsByHour: jest.fn((data) =>
-    data.map((d, i) => ({ time: d.time, count: i }))
-  ),
-}));
-
-describe("TimelineChart component", () => {
-  afterEach(() => {
-    cleanup();
-    jest.clearAllMocks();
+describe('TimelineChartSVG Component', () => {
+  test('renders without crashing', () => {
+    render(<TimelineChartSVG data={sampleLogs} />);
+    expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
-  test("renders the chart and initializes echarts with the correct options", () => {
-    const mockData = [{ time: new Date(), count: 1 }];
-    render(<TimelineChart data={mockData} />);
+  test('renders "No data to show" when there is no data', () => {
+    render(<TimelineChartSVG data={[]} />); 
 
-    // Verify echarts was initialized
-    expect(echarts.init).toHaveBeenCalled();
-
-    // Verify that setOption was called with the right options
-    const mockInstance = echarts.init.mock.results[0].value;
-    expect(mockInstance.setOption).toHaveBeenCalledWith(
-      expect.objectContaining({
-        title: expect.objectContaining({ text: "Timeline Component" }),
-        xAxis: expect.objectContaining({ type: "time" }),
-        yAxis: expect.objectContaining({ name: "Event Count" }),
-      })
-    );
+    const noDataMessage = screen.getByText(/no data to show/i);
+    expect(noDataMessage).toBeInTheDocument();
   });
 
-  test("updates the chart when data prop changes", () => {
-    const initialData = [{ time: new Date(), count: 1 }];
-    const { rerender } = render(<TimelineChart data={initialData} />);
-
-    const mockInstance = echarts.init.mock.results[0].value;
-
-    // Update data
-    const updatedData = [
-      { time: new Date(), count: 2 },
-      { time: new Date(), count: 3 },
-    ];
-    rerender(<TimelineChart data={updatedData} />);
-
-    // Verify that the chart is updated
-    expect(mockInstance.setOption).toHaveBeenCalledTimes(2); // Called initially and after data update
+  test('groups logs by date and hour correctly', () => {
+    const grouped = groupLogsByDateAndHour(sampleLogs);
+    expect(grouped).toEqual([
+      { date: '9/30/2024', hour: '5', count: 2 },
+      { date: '9/30/2024', hour: '6', count: 1 },
+      { date: '9/30/2024', hour: '7', count: 2 },
+    ]);
   });
 
-  test("disposes of the chart on unmount", () => {
-    const mockData = [{ time: new Date(), count: 1 }];
-    const { unmount } = render(<TimelineChart data={mockData} />);
+  test('renders the correct number of bars', () => {
+    render(<TimelineChartSVG data={sampleLogs} />);
+    const bars = screen.getAllByRole('img', { hidden: true });
+    expect(bars.length).toBe(3); 
+  });
 
-    const mockInstance = echarts.init.mock.results[0].value;
-    unmount();
+  test('renders x-axis labels correctly', () => {
+    render(<TimelineChartSVG data={sampleLogs} />);
+    const xAxisLabels = sampleLogs.map(log => {
+      const date = new Date(log._time).toLocaleDateString();
+      const hour = new Date(log._time).getHours();
+      return `${date} ${hour}:00`;
+    });
 
-    // Verify that the chart is disposed of
-    expect(mockInstance.dispose).toHaveBeenCalled();
+    xAxisLabels.forEach(label => {
+      expect(screen.getByText(label)).toBeInTheDocument();
+    });
+  });
+
+  test('has accessible title and description', () => {
+    render(<TimelineChartSVG data={sampleLogs} />);
+    expect(screen.getByLabelText('Logs Timeline Chart')).toBeInTheDocument();
+    expect(screen.getByLabelText(/A bar chart representing logs grouped by date and hour/i)).toBeInTheDocument();
   });
 });

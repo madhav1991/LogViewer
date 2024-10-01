@@ -1,25 +1,18 @@
-// Function to format time to the desired hourly format (e.g., "2024-08-21T09:00:00")
-const formatHour = (timestamp) => {
-    const date = new Date(timestamp);
-    date.setMinutes(0, 0, 0); // Set minutes and seconds to 0 to group by hour
-    return date.toISOString();
-  };
-  
-  // Group logs by hourly timestamp and count the occurrences
-  export const groupLogsByHour = (logs) => {
-    const groupedLogs = {};
-    logs.forEach((log) => {
-      const hour = formatHour(log._time); // Format the time to hour
-      if (groupedLogs[hour]) {
-        groupedLogs[hour] += 1; // Increment count if the hour already exists
-      } else {
-        groupedLogs[hour] = 1; // Initialize count for a new hour
-      }
+// Group logs by date and hour
+export const groupLogsByDateAndHour = (data) => {
+    const grouped = {};
+    data.forEach(log => {
+      const date = new Date(log._time).toLocaleDateString(); // Get the date
+      const hour = new Date(log._time).getHours(); // Get the hour
+      const key = `${date} ${hour}`; // Create a key combining date and hour
+      grouped[key] = (grouped[key] || 0) + 1; // Increment the count
     });
-    // Convert the grouped logs object to the desired array format
-    return Object.keys(groupedLogs).map((hour) => ({
-      time: hour,
-      count: groupedLogs[hour],
-    }));
+    return Object.keys(grouped).map(key => {
+      const [date, hour] = key.split(" ");
+      return {
+        date,
+        hour,
+        count: grouped[key]
+      };
+    });
   };
-  
