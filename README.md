@@ -7,6 +7,7 @@
 - Data Fetching:
     - Fetch log data from the provided URL using fetch API or a similar method.
     - Handle different HTTP response statuses (e.g., success, error).
+    - Fetch data in chunks rather than waiting for the entire file to download.
 - Data Processing:
     - Parse fetched NDJSON data into individual JSON objects.
     - Extract the _time property from each log entry.
@@ -18,7 +19,8 @@
     - Allow users to expand/collapse individual log entries.
     - The expanded view displays the complete event in multiline JSON format.
     - The collapsed view displays the single-line JSON representation.
-
+- Visualization:
+    - Users should be able to see the event counts over a period of time in a graphical format.
 
 ### Non-Functional Requirements for Log Viewer
 - Performance:
@@ -31,6 +33,11 @@
     - Ensure the component is accessible for users with disabilities by adhering to accessibility guidelines.
 - Testability:
     - Implement unit tests to cover core functionalities such as data fetching, parsing, and rendering. 
+- Responsiveness
+    - The application should be responsive across different device sizes.
+- Error Handling
+    - The application should be able to handle scenarios where the API fails without any response or returns no data at all.
+
 
 ### API
 
@@ -79,7 +86,7 @@ According to the given requirements, we need to load data immediately instead of
 
 - Best for: Efficient UI rendering and memory usage
 
-**Solution** : We should use either HTTP Range Requests or Stream with the Fetch API for fetching data from the server.HTTP Range Requests suit the requirements better as they only load the data size requested. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
+**Solution** : We should use either HTTP Range Requests or Stream with the Fetch API for fetching data from the server. HTTP Range Requests suit the requirements better as they only load the data size requested. A hybrid approach of HTTP Range Requests and Virtual Scrolling suits the use case to get the best out of both systems. 
 
 ### Rendering Strategy - Virtual Scrolling
 
@@ -121,13 +128,13 @@ According to the given requirements, we need to load data immediately instead of
 ### Using mouse 
 
 - Upon loading the page, a few events are loaded by default. (Added "a few") More events can be loaded by scrolling to the bottom of the page.
-- The left side of the table shows the time formatted as ISO 8601. The right side displays details of the events.
+- The first column of the table shows the time formatted as ISO 8601. The second column displays details of the events formatted as single line JSON.
 - Each event's detail can be seen by clicking on the row of the table, which shows it in detailed NDJSON format.
 - Upon inspecting network logs, only one API call is made when the application is loaded. Subsequent API calls are made when scrolled to the end of the list.
 - Bonus Section
     - TimeLine Component
-        - This graph shows the collection of logs over time. The x-axis indicates time and the y-axis shows the number of events.
-        - TThe width of the x-axis increases as the number of logs increases to accommodate more graphs.
+        - The graph shows the collection of logs over time. The x-axis indicates the date and time, while the y-axis shows the number of events.
+        - The width of the x-axis increases as the number of logs increases to accommodate more graphs.
 
 ### Accessibility
 
@@ -144,17 +151,25 @@ According to the given requirements, we need to load data immediately instead of
 - Unit tests have been added for each component
     - LogViewer
         - Renders the table correctly 
-        - Fetches and displays the logs correctly
         - Toggles row expansion to show log details
-        - Fetches more logs when scrolled to the end of list
-    - TimeLineChart
-        - Renders the chart and initializes with correct options
-        - Updates chart when the prop changes
+        - Shows loading indicator when fetching logs
+    - TimelineChartSVG
+        - Renders without crashing
+        - Renders "No data to show" when there is no data
+        - Renders x-axis labels correctly
+        - Groups logs by date and hour correctly
+        - Has accessible title and description
     - Utils/index.js
         - Checks if logs are grouped by date and hour
         - Returns empty array for empty input
 
-- Given more time, I would have tested the application by adding more E2E tests which gives us more confidence on the entire application.
+- Given more time, I would have tested the application by adding more end-to-end (E2E) tests, which would give us greater confidence in the entire application. In E2E tests, I shall selenium/plaright to test the following
+    - When the user scrolls, more events are loaded and the graph is updated.
+    - The user can click on each row of the table to expand or collapse it.
+    - Show in the network logs that an API call is made only when the end of the page is reached.
+- Additionally, when a user clicks on each bar, only the events related to that timeline should be displayed. Currently, users cannot click on each bar of the graph.
+
+
 
 
 
