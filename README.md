@@ -125,6 +125,20 @@ According to the given requirements, we need to load data immediately instead of
 
 ## Usage
 
+### Using project
+
+- Clone the project from https://github.com/madhav1991/LogViewer.git
+- It is suggested to use Node version of greater than 18.0
+- Install node modules in your poject using npm i 
+- Run the application using npm start
+- It should load the application now
+- To run unit tests, install these in your dev dependency 
+```
+   - npm install --save-dev @testing-library/jest-dom
+   - npm install @testing-library/react --save-dev
+```
+
+
 ### Using mouse 
 
 - Upon loading the page, a few events are loaded by default. (Added "a few") More events can be loaded by scrolling to the bottom of the page.
