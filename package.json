@@ -5,13 +5,15 @@
   "keywords": [],
   "main": "src/index.tsx",
   "dependencies": {
+    "echarts": "5.5.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-scripts": "^5.0.0",
-    "styled-components": "6.1.13",
-    "echarts": "5.5.1"
+    "styled-components": "6.1.13"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
     "@types/react": "18.2.38",
     "@types/react-dom": "18.2.15",
     "loader-utils": "3.2.1",
