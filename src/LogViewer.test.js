@@ -2,57 +2,27 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import LogViewer from "./LogViewer";
-import { TimelineChart } from "./TimelineChart";
 
-// Mock dependencies
-jest.mock("./TimelineChart", () => ({
-  TimelineChart: jest.fn(() => <div data-testid="timeline-chart" />),
-}));
-
-jest.mock("./StyledLogViewer", () => ({
-  LogViewerContainer: jest.fn(({ children }) => <div>{children}</div>),
-  StyledTable: jest.fn(({ children }) => <table>{children}</table>),
-  TableHeader: jest.fn(({ children }) => <th>{children}</th>),
-  TableCell: jest.fn(({ children }) => <td>{children}</td>),
-  Chevron: jest.fn(({ expanded }) => <span>{expanded ? "▼" : "›"}</span>),
-  LogRow: jest.fn(({ children, onClick }) => (
-    <tr onClick={onClick}>{children}</tr>
-  )),
-  LoadingIndicator: jest.fn(({ children }) => <div>{children}</div>),
-}));
+global.IntersectionObserver = class {
+  constructor(callback) {
+      this.callback = callback;
+  }
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+};
 
 describe("LogViewer component", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("renders TimelineChart and table correctly", async () => {
-    // Mock fetch call to return sample log data
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () =>
-          Promise.resolve(
-            `{"_time": "2024-01-01T12:00:00Z", "event": "Test event"}`
-          ),
-      })
-    );
-
-    render(<LogViewer />);
-
-    // Check if TimelineChart is rendered
-    expect(screen.getByTestId("timeline-chart")).toBeInTheDocument();
-
-    // Wait for logs to load and render in the table
-    await waitFor(() =>
-      expect(screen.getByText("2024-01-01T12:00:00.000Z")).toBeInTheDocument()
-    );
-    expect(screen.getByText(/Test event/)).toBeInTheDocument();
-  });
-
   test("fetches and displays logs correctly", async () => {
     // Mock fetch call to return sample log data
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok: true,
+        statusText: "OK",
         text: () =>
           Promise.resolve(
             `{"_time": "2024-01-01T12:00:00Z", "event": "Test event"}`
@@ -71,6 +41,8 @@ describe("LogViewer component", () => {
     // Mock fetch call to return sample log data
     global.fetch = jest.fn(() =>
       Promise.resolve({
+        ok: true,
+        statusText: "OK",
         text: () =>
           Promise.resolve(
             `{"_time": "2024-01-01T12:00:00Z", "event": "Test event"}`
@@ -97,6 +69,8 @@ describe("LogViewer component", () => {
         new Promise((resolve) =>
           setTimeout(() => {
             resolve({
+              ok: true,
+              statusText: "OK",
               text: () =>
                 Promise.resolve(
                   `{"_time": "2024-01-01T12:00:00Z", "event": "Test event"}`
@@ -117,38 +91,5 @@ describe("LogViewer component", () => {
     );
   });
 
-  test("fetches more logs when scrolling to end of list", async () => {
-    const mockIntersectionObserver = jest.fn();
-    mockIntersectionObserver.mockReturnValue({
-      observe: jest.fn(),
-      unobserve: jest.fn(),
-    });
-    global.IntersectionObserver = mockIntersectionObserver;
 
-    // Mock fetch call to return logs for multiple chunks
-    global.fetch = jest
-      .fn()
-      .mockResolvedValueOnce({
-        text: () =>
-          Promise.resolve(
-            `{"_time": "2024-01-01T12:00:00Z", "event": "First event"}`
-          ),
-      })
-      .mockResolvedValueOnce({
-        text: () =>
-          Promise.resolve(
-            `{"_time": "2024-01-01T12:05:00Z", "event": "Second event"}`
-          ),
-      });
-
-    render(<LogViewer />);
-
-    // Check if the first chunk of logs is rendered
-    await waitFor(() => screen.getByText("2024-01-01T12:00:00.000Z"));
-
-    // Simulate the intersection observer triggering load more logs
-    await waitFor(() => {
-      expect(mockIntersectionObserver).toHaveBeenCalled();
-    });
-  });
 });

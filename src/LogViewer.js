@@ -8,8 +8,7 @@ import {
   LogRow,
   LoadingIndicator,
 } from "./StyledLogViewer";
-// import { TimelineChart } from "./TimeLineChart";
-import {TimelineChartSVG} from './TimeLineChart'
+import {TimelineChartSVG} from './TimelineChartSVG'
 
 const LogViewer = () => {
   const [logs, setLogs] = useState([]); // Store log entries
@@ -46,7 +45,6 @@ const LogViewer = () => {
           Range: `bytes=${start}-${end}`,
         },
       });
-
       if (!response.ok) {
         throw new Error(`Failed to fetch logs: ${response.statusText}`);
       }
@@ -81,7 +79,7 @@ const LogViewer = () => {
         }
       },
       {
-        threshold: 0.1, // Trigger when 10% of the loading element is visible
+        threshold: 0.5, // Trigger when 50% of the loading element is visible
       }
     );
 
@@ -106,7 +104,7 @@ const LogViewer = () => {
 
   return (
     <>
-      <TimelineChartSVG data={logs} />
+      {<TimelineChartSVG data={logs} data-testid="timeline-chart"/>}
       <LogViewerContainer>
         <StyledTable>
           <thead>

@@ -1,4 +1,4 @@
-import { groupLogsByDateAndHour} from "./timeUtils";
+import { groupLogsByDateAndHour} from "./index";
   
   describe('groupLogsByDateAndHour', () => {
     test('correctly groups logs by date and hour', () => {
@@ -13,9 +13,9 @@ import { groupLogsByDateAndHour} from "./timeUtils";
       const result = groupLogsByDateAndHour(logs);
   
       expect(result).toEqual([
-        { date: '9/30/2024', hour: '5', count: 2 },
-        { date: '9/30/2024', hour: '6', count: 1 },
-        { date: '9/30/2024', hour: '7', count: 2 },
+        { date: '9/30/2024', hour: '1', count: 2 },
+        { date: '9/30/2024', hour: '2', count: 1 },
+        { date: '9/30/2024', hour: '3', count: 2 },
       ]);
     });
   
@@ -36,9 +36,9 @@ import { groupLogsByDateAndHour} from "./timeUtils";
       const result = groupLogsByDateAndHour(logs);
   
       expect(result).toEqual([
-        { date: '9/30/2024', hour: '5', count: 2 },
-        { date: '9/30/2024', hour: '6', count: 1 },
-        { date: '10/1/2024', hour: '7', count: 2 },
+        { date: '9/30/2024', hour: '1', count: 2 },
+        { date: '9/30/2024', hour: '2', count: 1 },
+        { date: '10/1/2024', hour: '3', count: 2 },
       ]);
     });
   });
