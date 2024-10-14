@@ -14,12 +14,12 @@ export const StyledTable = styled.table`
   min-width: 600px;
   @media (max-width: 1440px) {
     min-width: 100%; /* Allow the table to shrink */
-    font-size: 14px; /* Reduce font size for smaller screens */
+    font-size: 14px; 
   }
 
   @media (max-width: 1024px) { 
     min-width: auto; /* Allow more shrinking on smaller screens */
-    font-size: 12px; /* Further reduce font size */
+    font-size: 12px; 
   }
 `;
 

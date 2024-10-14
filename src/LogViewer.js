@@ -14,7 +14,7 @@ const LogViewer = () => {
   const [logs, setLogs] = useState([]); // Store log entries
   const [expandedRows, setExpandedRows] = useState([]); // Manage expanded rows
   const [start, setStart] = useState(0); // Byte start position for range requests
-  const chunkSize = 10000; // Fetch 64KB chunks at a time
+  const chunkSize = 10000; // Fetch 10KB chunks at a time
   const url = "https://s3.amazonaws.com/io.cribl.c021.takehome/cribl.log";
 
   const endOfLogRef = useRef(null); // Ref for the loading element
@@ -45,6 +45,7 @@ const LogViewer = () => {
           Range: `bytes=${start}-${end}`,
         },
       });
+      console.log(response, response.ok);
       if (!response.ok) {
         throw new Error(`Failed to fetch logs: ${response.statusText}`);
       }
@@ -52,19 +53,20 @@ const LogViewer = () => {
       const text = await response.text();
       return text;
     } catch (error) {
+      setLoading(false);
       setError("Failed to load logs. Please try again.");
       throw error;
     }
   };
 
   const fetchLogs = useCallback(async () => {
-    if (loading) return; // Prevent fetch if already loading or end of data is reached
+    if (loading) return;
 
-    setLoading(true); // Start loading
+    setLoading(true);
     const newChunk = await fetchLogChunk(url, start, start + chunkSize);
     parseNDJSON(newChunk);
     setStart((prev) => prev + chunkSize);
-    setLoading(false); // End loading
+    setLoading(false);
   }, [url, start, loading]);
 
   useEffect(() => {
@@ -143,12 +145,12 @@ const LogViewer = () => {
             ))}
           </tbody>
         </StyledTable>
-        {loading && <LoadingIndicator>Loading more logs...</LoadingIndicator>}{" "}
+        {loading && <LoadingIndicator>Loading more logs...</LoadingIndicator>}
         {error && (
           <div role="alert" style={{ color: "red" }}>
             {error}
           </div>
-        )}{" "}
+        )}
         <div ref={endOfLogRef} /> {/* Ref for Intersection Observer */}
       </LogViewerContainer>
     </>

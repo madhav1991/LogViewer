@@ -3,7 +3,7 @@ import { groupLogsByDateAndHour } from "./utils/index";
 
 export const TimelineChartSVG = ({ data }) => {
   const groupedData = groupLogsByDateAndHour(data);
-  const maxCount = Math.max(...groupedData.map(d => d.count), 0); // Handle case where groupedData might be empty
+  const maxCount = Math.max(...groupedData.map(d => d.count), 0);
 
   const baseWidth = 600; 
   const minBarWidth = 65; 
@@ -39,17 +39,17 @@ export const TimelineChartSVG = ({ data }) => {
       ) : (
         <>
           {/* Bars */}
-          {groupedData.map((d, i) => {
-            const barHeight = (d.count / maxCount) * chartHeight;
+          {groupedData.map((data, i) => {
+            const barHeight = (data.count / maxCount) * chartHeight;
             return (
               <rect
                 key={i}
-                x={i * barWidth + 50} // Adjust x to account for Y-axis
+                x={i * barWidth + 50}
                 y={chartHeight - barHeight}
                 width={barWidth - 2} // Add spacing between bars
                 height={barHeight}
                 fill="#4A90E2"
-                aria-label={`${d.date} ${d.hour}:00 - ${d.count} logs`}
+                aria-label={`${data.date} ${data.hour}:00 - ${data.count} logs`}
               />
             );
           })}
@@ -58,8 +58,8 @@ export const TimelineChartSVG = ({ data }) => {
           {groupedData.map((d, i) => (
             <text
               key={i}
-              x={i * barWidth + barWidth / 2 + 50} // Adjust x to account for Y-axis
-              y={chartHeight + 20} // Position of x-axis labels
+              x={i * barWidth + barWidth / 2 + 50}
+              y={chartHeight + 20}
               textAnchor="middle"
               fontSize="10px"
               fill="#333"
