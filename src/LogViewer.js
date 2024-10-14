@@ -45,7 +45,6 @@ const LogViewer = () => {
           Range: `bytes=${start}-${end}`,
         },
       });
-      console.log(response, response.ok);
       if (!response.ok) {
         throw new Error(`Failed to fetch logs: ${response.statusText}`);
       }

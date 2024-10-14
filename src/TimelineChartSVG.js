@@ -55,7 +55,7 @@ export const TimelineChartSVG = ({ data }) => {
           })}
 
           {/* X-axis labels */}
-          {groupedData.map((d, i) => (
+          {groupedData.map((data, i) => (
             <text
               key={i}
               x={i * barWidth + barWidth / 2 + 50}
@@ -64,7 +64,7 @@ export const TimelineChartSVG = ({ data }) => {
               fontSize="10px"
               fill="#333"
             >
-              {`${d.date} ${d.hour}:00`} {/* Display date and hour */}
+              {`${data.date} ${data.hour}:00`}
             </text>
           ))}
 

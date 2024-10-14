@@ -177,7 +177,7 @@ According to the given requirements, we need to load data immediately instead of
         - Checks if logs are grouped by date and hour
         - Returns empty array for empty input
 
-- Given more time, I would have tested the application by adding more end-to-end (E2E) tests, which would give us greater confidence in the entire application. In E2E tests, I shall selenium/plaright to test the following
+- Given more time, I would have tested the application by adding more end-to-end (E2E) tests, which would give us greater confidence in the entire application. In E2E tests, I shall use selenium/plaright to test the following
     - When the user scrolls, more events are loaded and the graph is updated.
     - The user can click on each row of the table to expand or collapse it.
     - Show in the network logs that an API call is made only when the end of the page is reached.

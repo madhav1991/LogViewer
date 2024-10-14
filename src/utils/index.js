@@ -2,10 +2,10 @@
 export const groupLogsByDateAndHour = (data) => {
     const grouped = {};
     data.forEach(log => {
-      const date = new Date(log._time).toLocaleDateString(); // Get the date
-      const hour = new Date(log._time).getHours(); // Get the hour
-      const key = `${date} ${hour}`; // Create a key combining date and hour
-      grouped[key] = (grouped[key] || 0) + 1; // Increment the count
+      const date = new Date(log._time).toLocaleDateString();
+      const hour = new Date(log._time).getHours(); 
+      const key = `${date} ${hour}`; 
+      grouped[key] = (grouped[key] || 0) + 1;
     });
     return Object.keys(grouped).map(key => {
       const [date, hour] = key.split(" ");

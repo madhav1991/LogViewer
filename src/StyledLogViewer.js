@@ -66,7 +66,7 @@ export const Chevron = styled.span`
   margin-right: 5px;
   position: relative;
   ${({ expanded }) => expanded
-    ? `transform: rotate(90deg); top: -5px;`
+    ? `top: -5px;`
     : `top: 0;`}
 `;
 
